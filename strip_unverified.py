@@ -3,6 +3,16 @@ warnings.filterwarnings('ignore')
 src='Longevity GAL September 2026.xlsx'
 wb=openpyxl.load_workbook(src)
 ws=wb['GAL Sep-26']
+from openpyxl.utils import get_column_letter, column_index_from_string
+from openpyxl.worksheet.dimensions import ColumnDimension
+widths={}
+for d in list(ws.column_dimensions.values()):
+    if d.min and d.max:
+        for i in range(d.min,d.max+1): widths[i]=(d.width, d.hidden)
+ws.column_dimensions.clear()
+for i in range(1,43):
+    w,h=widths.get(i,(None,False))
+    ws.column_dimensions[get_column_letter(i)]=ColumnDimension(ws,index=get_column_letter(i),width=w,hidden=h,customWidth=w is not None)
 for c in ['AB','AE','AF','AG','AH','AI','AJ','AK']:
     ws.column_dimensions[c].hidden=True
 for r in range(1,6):

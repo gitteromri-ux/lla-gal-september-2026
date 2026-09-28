@@ -8,7 +8,7 @@ def fmt(v, nf):
     if isinstance(v,dt.datetime): return f'{v.day}.{v.month}.{v.year}'
     if isinstance(v,str): return html.escape(v)
     if isinstance(v,(int,float)):
-        if v==0 and ('"–"' in nf or ';0' in nf): return '–' if '"–"' in nf else '0'
+        if v==0 and nf.count(';')>=2: return '0' if nf.rstrip().endswith(';0') else '–'
         if '%' in nf: return f'{v*100:.1f}%' if '0.0%' in nf else f'{v*100:.0f}%'
         if nf.startswith('0.00'): return f'{v:.2f}'
         if '0.0' in nf: return f'{v:,.1f}'

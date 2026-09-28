@@ -40,7 +40,7 @@ def sheet_html(ws, hidden_cols=(), header_rows=(), skip_rows=()):
     out=['<table dir="ltr">']
     head_rows = header_rows
     for r in range(1,ws.max_row+1):
-        if r in skip_rows: continue
+        if r in skip_rows or ws.row_dimensions[r].hidden: continue
         if head_rows and r==head_rows[0]: out.append('<thead>')
         cells=[]
         empty=True

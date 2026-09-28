@@ -20,6 +20,7 @@ thead tr:nth-child(2) td{top:52px}
 thead tr:first-child td{height:28px}
 tbody td:first-child, thead td:first-child{position:sticky;left:0;z-index:6;background:#fff;box-shadow:2px 0 0 #D6DBE3}
 thead td:first-child{z-index:8}
+thead tr:first-child td:first-child{left:auto;position:sticky}
 tbody tr td:first-child[style*="background"]{}
 td[colspan]{text-align:left}
 </style>
@@ -136,4 +137,8 @@ td[colspan]{text-align:left}
 <tr><td style="font-size:26px;text-align:general">ecomm-02 #118149</td><td style="font-size:26px;text-align:general">293.5</td><td style="font-size:26px;text-align:general">292.6</td><td style="font-size:26px;text-align:general">0.90</td></tr>
 <tr><td style="color:#4B5563;font-style:italic;font-size:25px;text-align:general">Δ within ±$1 = live-day drift between the CSV export time and the API pull (ecomm-01/-02 still delivering).</td><td style="font-size:19px"></td><td style="font-size:19px"></td><td style="font-size:19px"></td></tr>
 </table></div></section>
+<script>
+function fixSticky(){document.querySelectorAll('table').forEach(t=>{const r=t.querySelectorAll('thead tr');if(r.length>1){const h=r[0].getBoundingClientRect().height;r[1].querySelectorAll('td').forEach(td=>td.style.top=h+'px');}});}
+window.addEventListener('load',fixSticky);window.addEventListener('resize',fixSticky);
+</script>
 </body></html>

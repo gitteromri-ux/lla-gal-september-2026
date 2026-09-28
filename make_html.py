@@ -118,7 +118,7 @@ td[colspan]{{text-align:left}}
 </div>
 {''.join(sections)}
 <script>
-function fixSticky(){document.querySelectorAll('table').forEach(t=>{const r=t.querySelectorAll('thead tr');if(r.length>1){const h=r[0].getBoundingClientRect().height;r[1].querySelectorAll('td').forEach(td=>td.style.top=h+'px');}});}
+function fixSticky(){{document.querySelectorAll('table').forEach(t=>{{const r=t.querySelectorAll('thead tr');if(r.length>1){{const h=r[0].getBoundingClientRect().height;r[1].querySelectorAll('td').forEach(td=>td.style.top=h+'px');}}}});}}
 window.addEventListener('load',fixSticky);window.addEventListener('resize',fixSticky);
 </script>
 </body></html>'''

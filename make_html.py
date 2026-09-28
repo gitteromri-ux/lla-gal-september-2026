@@ -28,7 +28,7 @@ def fcolor(c):
     except: pass
     return None
 
-def sheet_html(ws, hidden_cols=()):
+def sheet_html(ws, hidden_cols=(), header_rows=(), skip_rows=()):
     merged={}
     for m in ws.merged_cells.ranges:
         merged[(m.min_row,m.min_col)]=(m.max_row-m.min_row+1,m.max_col-m.min_col+1)
@@ -38,7 +38,10 @@ def sheet_html(ws, hidden_cols=()):
     maxc=ws.max_column
     hidden=set(hidden_cols)|{c for c in range(1,maxc+1) if ws.column_dimensions[openpyxl.utils.get_column_letter(c)].hidden}
     out=['<table dir="ltr">']
+    head_rows = header_rows
     for r in range(1,ws.max_row+1):
+        if r in skip_rows: continue
+        if head_rows and r==head_rows[0]: out.append('<thead>')
         cells=[]
         empty=True
         for c in range(1,maxc+1):
@@ -53,7 +56,7 @@ def sheet_html(ws, hidden_cols=()):
             if fg: st.append(f'color:{fg}')
             if cell.font.bold: st.append('font-weight:700')
             if cell.font.italic: st.append('font-style:italic')
-            if cell.font.sz: st.append(f'font-size:{int(cell.font.sz)+2}px')
+            if cell.font.sz: st.append(f'font-size:{int(cell.font.sz)+8}px')
             al=cell.alignment.horizontal
             if isinstance(cell.value,(int,float)) and not isinstance(cell.value,dt.datetime) and al is None: al='right'
             if al: st.append(f'text-align:{al}')
@@ -64,12 +67,19 @@ def sheet_html(ws, hidden_cols=()):
                 span=f' colspan="{cs}" rowspan="{rs}"'
             cells.append(f'<td{span} style="{";".join(st)}">{v}</td>')
         if not empty: out.append('<tr>'+''.join(cells)+'</tr>')
-    out.append('</table>')
+        if head_rows and r==head_rows[-1]: out.append('</thead><tbody>')
+    out.append('</tbody></table>' if head_rows else '</table>')
     return '\n'.join(out)
 
 sections=[]
 for ws in wb:
-    sections.append(f'<section><h2>{html.escape(ws.title)}</h2><div class="wrap">{sheet_html(ws)}</div></section>')
+    if ws.title=='GAL Sep-26':
+        body=sheet_html(ws, header_rows=(4,5), skip_rows=(1,2,3))
+    elif ws.title=='Spend by Campaign':
+        body=sheet_html(ws, header_rows=(4,), skip_rows=(1,2,3))
+    else:
+        body=sheet_html(ws)
+    sections.append(f'<section><h2>{html.escape(ws.title)}</h2><div class="wrap">{body}</div></section>')
 
 page=f'''<!doctype html>
 <html lang="en" dir="ltr">
@@ -78,17 +88,23 @@ page=f'''<!doctype html>
 <title>Longevity Life Academy — GAL Board Report · September 2026</title>
 <style>
 html,body{{direction:ltr !important;unicode-bidi:embed}}
-body{{margin:0;padding:28px 32px 60px;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:20px;color:#1F2937;background:#F7F8FB}}
-h1{{font-size:34px;color:#0B1F3A;margin:0 0 8px}}
-h2{{font-size:26px;color:#0B1F3A;margin:36px 0 12px}}
+body{{margin:0;padding:28px 32px 60px;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:26px;color:#1F2937;background:#F7F8FB}}
+h1{{font-size:44px;color:#0B1F3A;margin:0 0 10px}}
+h2{{font-size:34px;color:#0B1F3A;margin:40px 0 14px}}
 .bar{{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0 6px}}
-.bar a{{display:inline-block;padding:12px 20px;border-radius:10px;background:#0B1F3A;color:#fff;text-decoration:none;font-weight:700;font-size:18px}}
+.bar a{{display:inline-block;padding:14px 24px;border-radius:12px;background:#0B1F3A;color:#fff;text-decoration:none;font-weight:700;font-size:24px}}
 .bar a.alt{{background:#0E7C86}}
-.note{{font-size:17px;color:#4B5563;margin:6px 0 18px}}
-.wrap{{overflow:auto;background:#fff;border:1px solid #D6DBE3;border-radius:12px;box-shadow:0 2px 10px rgba(11,31,58,.06)}}
-table{{border-collapse:collapse;direction:ltr;white-space:nowrap;min-width:100%}}
-td{{padding:9px 12px;border-bottom:1px solid #E8EDF5;font-size:20px;text-align:left;vertical-align:middle}}
-tr:first-child td{{border-bottom:none}}
+.note{{font-size:22px;color:#4B5563;margin:6px 0 18px;line-height:1.4}}
+.wrap{{overflow:auto;max-height:calc(100vh - 40px);background:#fff;border:1px solid #D6DBE3;border-radius:12px;box-shadow:0 2px 10px rgba(11,31,58,.06)}}
+table{{border-collapse:separate;border-spacing:0;direction:ltr;white-space:nowrap;min-width:100%}}
+td{{padding:12px 16px;border-bottom:1px solid #E8EDF5;font-size:26px;text-align:left;vertical-align:middle;line-height:1.25}}
+thead td{{position:sticky;top:0;z-index:5;box-shadow:0 2px 0 #0B1F3A}}
+thead tr:nth-child(2) td{{top:52px}}
+thead tr:first-child td{{height:28px}}
+tbody td:first-child, thead td:first-child{{position:sticky;left:0;z-index:6;background:#fff;box-shadow:2px 0 0 #D6DBE3}}
+thead td:first-child{{z-index:8}}
+tbody tr td:first-child[style*="background"]{{}}
+td[colspan]{{text-align:left}}
 </style>
 </head>
 <body>

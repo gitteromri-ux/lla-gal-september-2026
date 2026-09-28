@@ -103,6 +103,7 @@ thead tr:nth-child(2) td{{top:52px}}
 thead tr:first-child td{{height:28px}}
 tbody td:first-child, thead td:first-child{{position:sticky;left:0;z-index:6;background:#fff;box-shadow:2px 0 0 #D6DBE3}}
 thead td:first-child{{z-index:8}}
+thead tr:first-child td:first-child{{left:auto;position:sticky}}
 tbody tr td:first-child[style*="background"]{{}}
 td[colspan]{{text-align:left}}
 </style>
@@ -116,6 +117,10 @@ td[colspan]{{text-align:left}}
 <a class="alt" href="https://github.com/gitteromri-ux/lla-gal-september-2026">GitHub repo</a>
 </div>
 {''.join(sections)}
+<script>
+function fixSticky(){document.querySelectorAll('table').forEach(t=>{const r=t.querySelectorAll('thead tr');if(r.length>1){const h=r[0].getBoundingClientRect().height;r[1].querySelectorAll('td').forEach(td=>td.style.top=h+'px');}});}
+window.addEventListener('load',fixSticky);window.addEventListener('resize',fixSticky);
+</script>
 </body></html>'''
 open(OUT,'w').write(page)
 print('ok', len(page))

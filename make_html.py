@@ -36,7 +36,10 @@ def sheet_html(ws, hidden_cols=(), header_rows=(), skip_rows=()):
             for c in range(m.min_col,m.max_col+1):
                 if (r,c)!=(m.min_row,m.min_col): merged[(r,c)]=None
     maxc=ws.max_column
-    hidden=set(hidden_cols)|{c for c in range(1,maxc+1) if ws.column_dimensions[openpyxl.utils.get_column_letter(c)].hidden}
+    hidden=set(hidden_cols)
+    for d in ws.column_dimensions.values():
+        if d.hidden and d.min and d.max:
+            hidden|=set(range(d.min,d.max+1))
     out=['<table dir="ltr">']
     head_rows = header_rows
     for r in range(1,ws.max_row+1):

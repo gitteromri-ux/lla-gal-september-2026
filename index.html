@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Longevity Life Academy — GAL Board Report · September 2026</title>
 <style>
-html,body{direction:ltr !important;unicode-bidi:embed}
+html,body{direction:ltr !important;unicode-bidi:embed;overflow-x:auto}
 body{margin:0;padding:28px 32px 60px;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:26px;color:#1F2937;background:#F7F8FB}
 h1{font-size:44px;color:#0B1F3A;margin:0 0 10px}
 h2{font-size:34px;color:#0B1F3A;margin:40px 0 14px}
@@ -12,13 +12,14 @@ h2{font-size:34px;color:#0B1F3A;margin:40px 0 14px}
 .bar a{display:inline-block;padding:14px 24px;border-radius:12px;background:#0B1F3A;color:#fff;text-decoration:none;font-weight:700;font-size:24px}
 .bar a.alt{background:#0E7C86}
 .note{font-size:22px;color:#4B5563;margin:6px 0 18px;line-height:1.4}
-.wrap{overflow:auto;max-height:calc(100vh - 40px);background:#fff;border:1px solid #D6DBE3;border-radius:12px;box-shadow:0 2px 10px rgba(11,31,58,.06)}
+.wrap{overflow:visible;background:#fff;border:1px solid #D6DBE3;border-radius:12px;box-shadow:0 2px 10px rgba(11,31,58,.06)}
 table{border-collapse:separate;border-spacing:0;direction:ltr;white-space:nowrap;min-width:100%}
 td{padding:12px 16px;border-bottom:1px solid #E8EDF5;font-size:26px;text-align:left;vertical-align:middle;line-height:1.25}
 thead td{position:sticky;top:0;z-index:5;box-shadow:0 2px 0 #0B1F3A}
 thead tr:nth-child(2) td{top:52px}
 thead tr:first-child td{height:28px}
-tbody td:first-child, thead td:first-child{position:sticky;left:0;z-index:6;background:#fff;box-shadow:2px 0 0 #D6DBE3}
+tbody td:first-child, thead td:first-child{position:sticky;left:0;z-index:6;background:#fff;box-shadow:2px 0 0 #D6DBE3;white-space:normal;min-width:260px;max-width:380px}
+tbody td:first-child[colspan]{max-width:none;white-space:nowrap}
 thead td:first-child{z-index:8}
 thead tr:first-child td:first-child{left:auto;position:sticky}
 tbody tr td:first-child[style*="background"]{}
